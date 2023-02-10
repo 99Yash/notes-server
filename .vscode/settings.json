@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "**/*.js: { \"when\": \"$(basename).ts\" }": true
+  },
+  "workbench.colorCustomizations": {
+    "[GitHub Dark Colorblind (Beta)]": {
+      "list.errorForeground": "#b3e5ec",
+      "list.warningForeground": "#00d9ff",
+      "gitDecoration.modifiedResourceForeground": "#1adba1",
+      "gitDecoration.untrackedResourceForeground": "#c6c6c6"
+    }
+  }
+}

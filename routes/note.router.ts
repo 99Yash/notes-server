@@ -1,15 +1,8 @@
-import express from 'express';
 import { Router } from 'express';
+import { getNote } from '../controllers/notes.controller';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-router.post('/', (req, res) => {
-  console.log(req.body);
-  res.send('POST request to the homepage');
-});
+router.post('/', getNote);
 
 export default router;
