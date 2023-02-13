@@ -1,22 +1,29 @@
 import { Document, Schema, Types, model } from 'mongoose';
+import { UserDoc } from './user.model';
 
 export interface NoteDoc extends Document {
   title: string;
   content: string;
   createdAt: Date;
   updatedAt: Date;
-  user: Types.ObjectId;
+  user?: UserDoc['_id'];
 }
 
-const noteSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const noteSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    // user: { type: Types.ObjectId, ref: 'User', required: true },
   },
-  content: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
-export const Note = model<NoteDoc>('Note', noteSchema);
+export const NoteModel = model<NoteDoc>('Note', noteSchema);

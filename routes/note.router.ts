@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getNote } from '../controllers/notes.controller';
+import { createNoteHandler } from '../controllers/notes.controller';
 
 const router = Router();
 
-router.post('/', getNote);
+router.post('/', createNoteHandler);
 
 export default router;

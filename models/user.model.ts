@@ -1,10 +1,11 @@
 import { Document, Schema, Types, model } from 'mongoose';
-
+import mongooseUniqueValidator from 'mongoose-unique-validator';
+import { NoteDoc } from './note.model';
 export interface UserDoc extends Document {
   email: string;
   name: string;
   password: string;
-  notes: Types.ObjectId[];
+  notes: NoteDoc['_id'];
 }
 
 const userSchema = new Schema({
@@ -25,8 +26,11 @@ const userSchema = new Schema({
     {
       type: Types.ObjectId,
       ref: 'Note',
+      default: [],
     },
   ],
 });
+
+userSchema.plugin(mongooseUniqueValidator);
 
 export const UserModel = model<UserDoc>('User', userSchema);
