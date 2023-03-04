@@ -54,10 +54,11 @@ export const createNoteHandler = async (req: Request, res: Response) => {
   //   console.error(err);
   //   return res.status(500).send('internal server error');
   // }
-
   let foundUser: UserDoc | null;
   try {
-    foundUser = await UserModel.findById(req.body.user.user._id);
+    let userId: string;
+    userId = req.body.user.user._id || req.body.user.user.user._id;
+    foundUser = await UserModel.findById(userId);
   } catch (err: any) {
     return res.status(401).send({ message: 'Something went wrong' });
   }

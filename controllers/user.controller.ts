@@ -55,6 +55,7 @@ export const signupController = async (req: Request, res: Response) => {
     token = jwt.sign({ email: user.email, id: user._id }, 'supersecret', {
       expiresIn: '1d',
     });
+    console.log(user);
     res.status(201).send({
       user,
       token,
