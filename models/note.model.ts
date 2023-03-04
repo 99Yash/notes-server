@@ -6,7 +6,7 @@ export interface NoteDoc extends Document {
   content: string;
   createdAt: Date;
   updatedAt: Date;
-  user?: UserDoc['_id'];
+  user: UserDoc['_id'];
 }
 
 const noteSchema = new Schema(
@@ -19,7 +19,7 @@ const noteSchema = new Schema(
       type: String,
       required: true,
     },
-    // user: { type: Types.ObjectId, ref: 'User', required: true },
+    user: { type: Types.ObjectId, ref: 'User', required: true },
   },
   {
     timestamps: true,

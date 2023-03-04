@@ -36,10 +36,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 mongoose
-  .connect('mongodb://127.0.0.1:27017/notesy', {})
+  .connect('mongodb://127.0.0.1:27017/notesy')
   .then(() => {
-    app.listen(5000, () => {
-      console.log('Server is running on port 5000');
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
     });
   })
   .catch((err) => {
