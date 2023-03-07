@@ -6,6 +6,7 @@ import {
 } from '../controllers/user.controller';
 
 const router = Router();
+// /api/users
 
 router.post('/login', loginController);
 
