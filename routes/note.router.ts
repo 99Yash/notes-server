@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   createNoteHandler,
+  deleteNoteHandler,
   getNoteById,
   getNotesByUserId,
   getNotesHandler,
@@ -10,12 +11,13 @@ import { verifyAuth } from '../middlewares/verifyAuth';
 
 const router = Router();
 // /api/notes
-router.get('/', getNotesHandler);
 
+router.get('/', getNotesHandler);
 // router.use(verifyAuth);
 router.post('/', createNoteHandler);
-router.patch('/:id', updateNoteHandler);
 router.get('/:id', getNoteById);
+router.patch('/:id', updateNoteHandler);
+router.delete('/:id', deleteNoteHandler);
 router.get('/user/:id', getNotesByUserId);
 
 export default router;

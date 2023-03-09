@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { NoteDoc, NoteModel } from '../models/note.model';
 import { UserDoc, UserModel } from '../models/user.model';
+import jwt from 'jsonwebtoken';
 interface Note {
   _id: string;
   title: string;
@@ -115,4 +116,42 @@ export const updateNoteHandler = async (req: Request, res: Response) => {
     return res.status(500).send('Something went wrong');
   }
   res.status(200).send({ message: 'Note updated' });
+};
+
+export const deleteNoteHandler = async (req: Request, res: Response) => {
+  let note: NoteDoc | null;
+  try {
+    note = await NoteModel.findById(req.params.id);
+  } catch (err: any) {
+    return res.status(500).send('Something went wrong');
+  }
+  if (!note) {
+    return res.status(404).send('Note not found');
+  }
+  let decodedToken: { email: string; id: string };
+  try {
+    const token = req.headers?.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).send({ message: 'Unauthorized' });
+    }
+    decodedToken = jwt.verify(token, 'supersecret') as {
+      email: string;
+      id: string;
+    };
+    if (!decodedToken) {
+      return res.status(401).send({ message: 'Unauthorized' });
+    }
+  } catch (err) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  if (note.user.toString() !== decodedToken.id) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+
+  try {
+    await note.remove();
+  } catch (err: any) {
+    return res.status(500).send('Something went wrong');
+  }
+  res.status(200).send({ message: 'Note deleted' });
 };
