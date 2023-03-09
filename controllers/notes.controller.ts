@@ -25,7 +25,7 @@ export const getNoteById = async (req: Request, res: Response) => {
 export const getNotesByUserId = async (req: Request, res: Response) => {
   let notes: NoteDoc[] | undefined;
   try {
-    notes = await NoteModel.find({ user: req.params.id });
+    notes = await NoteModel.find({ user: req.params.userId });
   } catch (err: any) {
     return res.status(500).send('Something went wrong');
   }
@@ -104,7 +104,8 @@ export const updateNoteHandler = async (req: Request, res: Response) => {
   if (!note) {
     return res.status(404).send('Note not found');
   }
-  if (note.user.toString() !== req.body.user.user._id) {
+  const userId = req.body.user.user._id || req.body.user.user.user._id;
+  if (note.user.toString() !== userId) {
     return res.status(401).send({ message: 'Unauthorized' });
   }
 
