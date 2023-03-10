@@ -35,16 +35,6 @@ export const getNotesByUserId = async (req: Request, res: Response) => {
   res.status(200).send(notes);
 };
 
-export const getNotesHandler = async (req: Request, res: Response) => {
-  let notes: NoteDoc[] | undefined;
-  try {
-    notes = await NoteModel.find();
-  } catch (err: any) {
-    return res.status(500).send('Something went wrong');
-  }
-  res.status(200).send(notes);
-};
-
 export const createNoteHandler = async (req: Request, res: Response) => {
   let foundUser: UserDoc | null;
   try {
