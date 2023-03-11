@@ -141,6 +141,9 @@ export const deleteNoteHandler = async (req: Request, res: Response) => {
 
   try {
     await note.remove();
+    await UserModel.findByIdAndUpdate(decodedToken.id, {
+      $pull: { notes: note._id }, //* $pull is a mongoDB method that removes the note from the user's notes array
+    });
   } catch (err: any) {
     return res.status(500).send('Something went wrong');
   }

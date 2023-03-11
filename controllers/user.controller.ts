@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/user.model';
+import { UserModel, UserDoc } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
 export const loginController = async (req: Request, res: Response) => {
@@ -54,7 +54,6 @@ export const signupController = async (req: Request, res: Response) => {
     token = jwt.sign({ email: user.email, id: user._id }, 'supersecret', {
       expiresIn: '1d',
     });
-    console.log(user);
     res.status(201).send({
       user,
       token,
@@ -64,4 +63,18 @@ export const signupController = async (req: Request, res: Response) => {
       .status(500)
       .send({ message: 'Logging in failed. Try again later' });
   }
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  let user: UserDoc | null;
+  try {
+    user = await UserModel.findById(id);
+  } catch (err: any) {
+    return res.status(500).send('Something went wrong');
+  }
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+  res.status(200).send(user);
 };

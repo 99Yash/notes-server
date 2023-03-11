@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 import {
+  getUserById,
   loginController,
   signupController,
 } from '../controllers/user.controller';
@@ -8,6 +9,7 @@ import {
 const router = Router();
 // /api/users
 
+router.get('/:id', getUserById);
 router.post('/login', loginController);
 
 router.post(
