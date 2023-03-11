@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { NoteDoc, NoteModel } from '../models/note.model';
 import { UserDoc, UserModel } from '../models/user.model';
-import jwt from 'jsonwebtoken';
 interface Note {
   _id: string;
   title: string;
