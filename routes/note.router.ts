@@ -12,6 +12,7 @@ const router = Router();
 // /api/notes
 
 router.use(verifyAuth);
+
 router.post('/', createNoteHandler);
 router.get('/:id', getNoteById);
 router.get('/user/:userId', getNotesByUserId);

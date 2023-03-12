@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { NoteDoc, NoteModel } from '../models/note.model';
 import { UserDoc, UserModel } from '../models/user.model';
+
 interface Note {
   _id: string;
   title: string;
@@ -22,8 +23,12 @@ export const getNoteById = async (req: Request, res: Response) => {
   res.status(200).send(note);
 };
 
-export const getNotesByUserId = async (req: Request, res: Response) => {
+export const getNotesByUserId = async (
+  req: Request<{ userId: string }>,
+  res: Response
+) => {
   let notes: NoteDoc[] | undefined;
+
   try {
     notes = await NoteModel.find({ user: req.params.userId });
   } catch (err: any) {
@@ -79,7 +84,10 @@ export const createNoteHandler = async (req: Request, res: Response) => {
   });
 };
 
-export const updateNoteHandler = async (req: Request, res: Response) => {
+export const updateNoteHandler = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   const { title, content } = req.body.note;
   if (!title || !content) {
     return res.status(400).send('All fields are required');
@@ -104,17 +112,20 @@ export const updateNoteHandler = async (req: Request, res: Response) => {
   try {
     await note.save();
   } catch (err: any) {
-    return res.status(500).send('Something went wrong');
+    return res.status(500).send('Saving note failed');
   }
   res.status(200).send({ message: 'Note updated' });
 };
 
-export const deleteNoteHandler = async (req: Request, res: Response) => {
+export const deleteNoteHandler = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   let note: NoteDoc | null;
   try {
     note = await NoteModel.findById(req.params.id);
   } catch (err: any) {
-    return res.status(500).send('Something went wrong');
+    return res.status(500).send('couldnt find note');
   }
   if (!note) {
     return res.status(404).send('Note not found');
@@ -145,7 +156,7 @@ export const deleteNoteHandler = async (req: Request, res: Response) => {
       $pull: { notes: note._id }, //* $pull is a mongoDB method that removes the note from the user's notes array
     });
   } catch (err: any) {
-    return res.status(500).send('Something went wrong');
+    return res.status(500).send('removing didnt work');
   }
   res.status(200).send({ message: 'Note deleted' });
 };

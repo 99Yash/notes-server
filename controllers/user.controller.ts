@@ -38,27 +38,34 @@ export const signupController = async (req: Request, res: Response) => {
     return res.status(400).send('All fields are required');
   }
 
-  let existingUser: any;
-  let user: any;
-  let token: string;
-
   try {
-    existingUser = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email });
+
     if (existingUser) {
       return res.status(400).send('User with this email already exists');
     }
-    let hashedPassword: string;
-    hashedPassword = await bcrypt.hash(password, 12);
-    user = await UserModel.create({ email, password: hashedPassword, name });
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const user = await UserModel.create({
+      email,
+      password: hashedPassword,
+      name,
+    });
+
     await user.save();
-    token = jwt.sign({ email: user.email, id: user._id }, 'supersecret', {
+
+    const token = jwt.sign({ email: user.email, id: user._id }, 'supersecret', {
       expiresIn: '1d',
     });
+
     res.status(201).send({
       user,
       token,
     });
   } catch (err) {
+    console.error(err);
+
     return res
       .status(500)
       .send({ message: 'Logging in failed. Try again later' });
